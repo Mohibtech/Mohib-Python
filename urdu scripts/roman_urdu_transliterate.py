@@ -9,14 +9,15 @@ def dict_populate(FILE_NAME):
 			eng,urdu = line.strip().split(':',1)
 			roman_urdu[eng] = urdu
 	except ValueError as e:
-	print€
+	print(e)
 
 def multiwordReplace(text, wordDic):
 	"""
 	take a text and replace words that match a key in a dictionary with
 	the associated value, return the changed text
 	"""
-	rc = re.compile('|'.join(map(re.escape, wordDic)))
+	#r'\b'+r'\b|\b'.
+    	rc = re.compile(r'\b|\b'.join(map(re.escape, wordDic)))
 
 	def translate(match):
 		return wordDic[match.group(0)]
@@ -32,17 +33,9 @@ roman_urdu = {}
 #Populate the dictionary with Roman(keys) and Urdu(values) words
 dict_populate(dict_file)
 
-# with open(dict_file,'r',encoding='utf8') as f:
-# roman_urdu = {a:b for line in f for a,b in line.strip().split(':')}
-# read the whole file at once
-
 f = open(input_file,'r')
 data = f.read()
 f.close()
-
-# perform all the replacements
-# for k,v in roman_urdu.items():
-# data = data.replace(k,v)
 
 text = multiwordReplace(data, roman_urdu)
 
