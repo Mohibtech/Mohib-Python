@@ -25,6 +25,9 @@ count_frame.columns = ['Count']
 
 # Plot the frequency of the top 60 words
 counts = count_frame.sort_values('Count', ascending = False)
+# Print words with counts in descending order
+print( counts )
+
 fig = plt.figure(figsize=(16, 9))
 ax = fig.gca()    
 counts['Count'][:60].plot(kind = 'bar', ax = ax)
