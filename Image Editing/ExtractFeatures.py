@@ -1,6 +1,6 @@
 # Extract Features
-# Harris Corner Detection
 
+# Harris Corner Detection
 def corner_harr(im, min_distance = 10):
     from skimage.feature import corner_harris, corner_peaks
     mag = corner_harris(im)
@@ -20,3 +20,19 @@ def plot_harris(im, harris, markersize = 20, color = 'red'):
     return 'Done'  
 
 plot_harris(i_eq, harris)
+
+# Sobel Edge Detection
+def edge_sobel(image):
+    from scipy import ndimage
+    import skimage.color as sc
+    import numpy as np
+    image = sc.rgb2gray(image) # Convert color image to gray scale
+    dx = ndimage.sobel(image, 1)  # horizontal derivative
+    dy = ndimage.sobel(image, 0)  # vertical derivative
+    mag = np.hypot(dx, dy)  # magnitude
+    mag *= 255.0 / np.amax(mag)  # normalize (Q&D)
+    mag = mag.astype(np.uint8)
+    return mag
+
+i_edge = edge_sobel(i_m)
+imshow(i_edge, cmap="gray")
