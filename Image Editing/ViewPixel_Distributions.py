@@ -8,7 +8,7 @@ def im_hist(img):
     ax = fig.gca()    
     ax.hist(img.flatten(), bins = 256)
     plt.show()
-
+ 
 im_hist(i_mono)
 
 # Plot a cumulative histogram
