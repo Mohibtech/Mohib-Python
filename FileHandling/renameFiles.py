@@ -2,20 +2,24 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 
-# Initializing tkinter
-root = tk.Tk()
-workingDir = filedialog.askdirectory(parent=root,initialdir="/",title='Please select a directory')
+tkroot = tk.Tk()  # Initializing Tkinter
+workingDir = filedialog.askdirectory(parent=tkroot,initialdir="/",title='Please select a directory')
 
 fileList = os.listdir(workingDir)
 os.chdir( workingDir )
 
-for filename in fileList:
-    fname, ext = os.path.splitext(filename)
-    fileNamePt = fname.split('-')
-    numFileName = len(fileNamePt)
-    if numFileName > 1:
-        newname = str(fileNamePt[1].strip() + ext)
-        print(newname)
-        os.rename(filename, newname)
-    else:
-        print(fname, numFileName)
+# Traverse root directory, and list directories as dirs and files as files
+for root, dirs, fileList in os.walk(workingDir):
+    path = root.split(os.sep)
+    print((len(path) - 1) * '..', os.path.basename(root))
+    for filename in fileList:
+        fname, ext = os.path.splitext(filename)
+        fileNamePt = fname.split('-')
+        numFileName = len(fileNamePt)
+        if numFileName > 1:
+            newname = str(fileNamePt[0].strip() + ext)
+            print(len(path) * '..', newname)    
+            #os.rename(filename, newname)
+        else:
+            print(fname, numFileName)
+
