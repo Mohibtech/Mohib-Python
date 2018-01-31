@@ -9,7 +9,9 @@ statement="""
           where employee_id > :eid 
           and department_id=:did
           """
+
 cursor.execute(statement, (100,10))
+#cursor.execute(statement, {'eid':100, 'did':10}) # Another to bind variables with names
 
 result = cursor.fetchall()
 for row in result:
