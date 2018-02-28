@@ -31,6 +31,7 @@ punctuations_list = urdu_punctuations + eng_punctuations
 # Time Starts now
 t0 = time.time()
 
+# https://github.com/Mohibtech/Mohib-Python/NLP/Firdos-e-BareeN - Abdul Haleem Sharar.txt
 text = file_list(r'urdu/Firdoos.txt')
 
 # Calling function to remove punctuations using unicode codepoints starting with 'P'
