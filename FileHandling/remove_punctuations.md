@@ -1,4 +1,4 @@
-
+```python
 import re
 import string
 #from nltk.tokenize import RegexpTokenizer
@@ -39,3 +39,6 @@ text_imp = remove_punctuations(text)
 #text_imp = remove_diacritics(text)
 
 print(text_imp)
+```
+
+Another method for removing punctuations
