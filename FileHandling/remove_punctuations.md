@@ -41,7 +41,20 @@ text_imp = remove_punctuations(text)
 print(text_imp)
 ```
 
-Another method for removing punctuations using all unicode points for punctuations
+## Another method for removing punctuations using all unicode codepoints for punctuations
+
+For Python 3 str or Python 2 unicode values, str.translate() only takes a dictionary; codepoints (integers) are looked up in that mapping and anything mapped to None is removed.
+
+To remove (some?) punctuation then, use:
+```python
+import string
+
+remove_punct_map = dict.fromkeys(map(ord, string.punctuation))
+text.translate(remove_punct_map)
+```
+
+The dict.fromkeys() class method makes it trivial to create the mapping, setting all values to None based on the sequence of keys.
+To remove all punctuation, not just ASCII punctuation, your table needs to be a little bigger:
 
 ```python
 def remove_unicode_punct(text):
