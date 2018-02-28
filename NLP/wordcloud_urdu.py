@@ -6,9 +6,17 @@ import matplotlib.pyplot as plt
 from arabic_reshaper import arabic_reshaper
 from bidi.algorithm import get_display
 
+def word_populate(FILE_NAME):
+    try:
+        with open(FILE_NAME,'r',encoding='utf8') as set_file:
+            bookwords = set(line.strip() for line in set_file.readlines())
+    except ValueError as e:
+           print(e)
+    return bookwords
+
 def remove_stopwords(text):
     words = nltk.word_tokenize(text)
-    stopwords_ur = ['میں','اور','کو','کی','کا', 'مجھے', 'پر','اس','جب', 'مگر ', 'کر','کے','کہ','ہو','ہی','اپنی','اپنے','نہیں','ہے','ہوں','گیا','ایک','سے','پھر','کوئی','یہاں','آپ','ہیں','تک','وہاں','ہوں','میرے','ہوا','لے','تھی','گی','اگر']
+    #stopwords_ur = ['میں','اور','کو','کی','کا', 'مجھے', 'پر','اس','جب', 'مگر ', 'کر','کے','کہ','ہو','ہی','اپنی','اپنے','نہیں','ہے','ہوں','گیا','ایک','سے','پھر','کوئی','یہاں','آپ','ہیں','تک','وہاں','ہوں','میرے','ہوا','لے','تھی','گی','اگر']
     stopwords_removed = [w for w in words if w not in stopwords_ur]
     return " ".join(stopwords_removed)
 
