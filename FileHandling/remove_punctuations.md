@@ -41,4 +41,13 @@ text_imp = remove_punctuations(text)
 print(text_imp)
 ```
 
-Another method for removing punctuations
+Another method for removing punctuations using all unicode points for punctuations
+
+```python
+def remove_unicode_punct(text):
+    remove_punct_map = dict.fromkeys(i for i in range(sys.maxunicode) 
+                                       if unicodedata.category(chr(i)).startswith('P'))
+    return text.translate(remove_punct_map)
+```
+
+
