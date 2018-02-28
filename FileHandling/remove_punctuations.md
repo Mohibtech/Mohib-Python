@@ -45,7 +45,7 @@ print(text_imp)
 
 For Python 3 str or Python 2 unicode values, str.translate() only takes a dictionary; codepoints (integers) are looked up in that mapping and anything mapped to None is removed.
 
-To remove (some?) punctuation then, use:
+To remove (ASCII based) punctuation then, use:
 ```python
 import string
 
