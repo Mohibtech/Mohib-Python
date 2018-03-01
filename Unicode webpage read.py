@@ -2,7 +2,7 @@
 from urllib.request import urlopen
  
 # Copy all of the content from UrduWeb page
-URL = 'https://raw.githubusercontent.com/Mohibtech/Mohib-Python/master/NLP/stopwords_UR.txt'
+URL = 'https://raw.githubusercontent.com/Mohibtech/urdu-stopwords/master/urdu_stopwords.txt'
 
 webpage = urlopen(URL)
 stopwords_UR = webpage.read().decode("utf-8")
