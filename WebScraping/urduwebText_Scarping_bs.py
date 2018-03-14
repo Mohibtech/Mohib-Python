@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import re
 import requests
 from bs4 import BeautifulSoup
@@ -11,10 +12,16 @@ soup = BeautifulSoup(html, "lxml")
 items = dict()
 article_rows = soup.findAll("blockquote", {"class": "messageText"})
 
+# if want to print all article_rows then remove indexing of first element article_rows[0]
 articleSoup = BeautifulSoup(str(article_rows[0]),"lxml" )
 articleText = articleSoup.get_text()
 
 # regex pattern for matching square brackets and text within it [*]
 strCleanred = re.sub("[\[].*?[\]]", "",  articleText)
 
-print(strCleaned)
+#print(strCleaned)
+
+ofile = r'QarzHaiJaanPar.txt'
+with open(ofile,'w',encoding='utf-8') as f:
+    f.write(str1)
+
