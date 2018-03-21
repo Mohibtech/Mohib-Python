@@ -19,7 +19,12 @@ def remove_punct(text):
     return text.translate(remove_punc_map)
 
 def remove_stopwords(words):
-    stopwords_ur = word_populate(r'urdu/stopwords_UR.txt')
+    #stopwords_ur = word_populate(r'urdu/stopwords_UR.txt')
+    # Read raw text from github file
+    from urllib.request import urlopen
+    URL = 'https://raw.githubusercontent.com/Mohibtech/urdu-stopwords/master/urdu_stopwords.txt'
+    stopwords_ur = urlopen(URL).read().decode("utf-8")
+    
     stopwords_removed = [w for w in words if w not in stopwords_ur]
     return " ".join(stopwords_removed)
 
