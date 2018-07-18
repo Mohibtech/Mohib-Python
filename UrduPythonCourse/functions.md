@@ -8,7 +8,7 @@ hello()
 
 Function to add two numbers
 
-```
+```python
 def add(x,y):
 ''' THIS FUNCTION ADD TWO NUMBERS '''
         return x+y
