@@ -8,8 +8,8 @@ langlst = page.iterlanglinks()
 
 interDict = {}
 for i in langlst:
-    lang = str(i.site).split(':')[1]
-    interDict[lang] = i.title
+    #lang = str(i.site).split(':')[1]
+    interDict[i.site.code] = i.title
      
 print(interDict)
 
