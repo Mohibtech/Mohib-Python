@@ -50,7 +50,7 @@ class CopyLinksBot(
         self.generator = generator
 
         # define the edit summary
-        self.summary = u'حوالے کاپی کیے'  # bot summary
+        self.summary = u'خودکار: اندراج حوالہ جات'  # bot summary
 
     def treat_page(self):
         """Load the given page, do some changes, and save it."""
@@ -89,15 +89,32 @@ class CopyLinksBot(
 
         print('just before filter tags')
         alltags = wikicode.filter_tags()
-        reftags = [tag.contents for tag in alltags if tag.tag=='ref']
+        
+        reftags = {}
+    
+        def search(myDict, search1):
+            for key, value in myDict.items():
+                if search1 in value:  
+                    return key 
+    
+        i=0
+        for tag in alltags:
+            if tag.tag=='ref':
+                name = tag.attributes[0]
+                refval = name.value
+                
+                if tag.contents is None:
+                    conval = search(reftags,refval)
+                    reftags[i] = (refval,reftags[conval][1])
+                else:    
+                    reftags[i] = (refval,tag.contents)
+                i += 1
 
         dlinks = {}
-        for  i,link in enumerate(reftags):
-            i+=1
-            dkey = 'و' + str(i) + 'و'
-            dlinks[dkey] = '<ref>' + str(link) + '</ref>'
+        for k,v in reftags.items():
+            dkey = 'و' + str(k+1) + 'و'
+            dlinks[dkey] = '<ref>' + str(v[1]) + '</ref>'
 
-        print('After link dict')
         urtext = urpage.text
         for r in tuple(dlinks.items()):
             urtext = urtext.replace(*r)
