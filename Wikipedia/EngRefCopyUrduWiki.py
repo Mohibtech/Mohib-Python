@@ -7,7 +7,6 @@ def search(myDict, search1):
         if search1 in value:  
             return key
 
-#title1 = "تلاش ہند"
 title = "داس کیپیٹل"
 
 site = pywikibot.Site('ur', 'wikipedia')
@@ -46,8 +45,7 @@ else:
             else:
                 name = tag.attributes[0]
                 refval = name.value
-                
-            
+                            
             if tag.contents is None:
                 #conval = search(reftags,refval)
                 #reftags[i] = (refval,reftags[conval][1])
@@ -74,7 +72,6 @@ else:
     else:
         urpage.text = urtext + newln*2
 
-    print('Printing appended Urdu Page')
     print(urpage.text)
 
     # save the page
