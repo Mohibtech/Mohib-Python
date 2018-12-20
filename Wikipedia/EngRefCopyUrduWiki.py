@@ -2,6 +2,12 @@
 import mwparserfromhell as mwp
 import pywikibot
 
+def search(myDict, search1):
+    for key, value in myDict.items():
+        if search1 in value:  
+            return key
+
+#title1 = "تلاش ہند"
 title = "داس کیپیٹل"
 
 site = pywikibot.Site('ur', 'wikipedia')
@@ -17,25 +23,43 @@ for i in langlst:
 if len(interDict)==0:
     print('Link Dictionary is empty')
 else:
-    englink = interDict['en']
+    eng_title = interDict['en']
 
     site = pywikibot.Site('en', 'wikipedia')
-    enpage = pywikibot.Page(site, englink)
+    enpage = pywikibot.Page(site, eng_title)
 
     wikitext = enpage.get()               
     wikicode = mwp.parse(wikitext)
 
     # Extracting External Links using mwparserfromhell function
-    extlinks = wikicode.filter_external_links()
+    #extlinks = wikicode.filter_external_links()
 
     alltags = wikicode.filter_tags()
-    reftags = [tag.contents for tag in alltags if tag.tag=='ref']
+    reftags = {}
+    #[tag.contents for tag in alltags if tag.tag=='ref']
+      
+    i=1
+    for tag in alltags:
+        if tag.tag=='ref':
+            if tag.attributes == []:      #check if attributes list is empty
+                refval='NoRefName'
+            else:
+                name = tag.attributes[0]
+                refval = name.value
+                
+            
+            if tag.contents is None:
+                #conval = search(reftags,refval)
+                #reftags[i] = (refval,reftags[conval][1])
+                pass
+            else:    
+                reftags[i] = (refval,tag.contents)
+                i += 1
 
     dlinks = {}
-    for  i,link in enumerate(reftags):
-        i+=1
-        dkey = 'ح' + str(i) + 'ح'
-        dlinks[dkey] = '<ref>' + str(link) + '</ref>'
+    for k,v in reftags.items():
+        dkey = 'و' + str(k) + 'و'
+        dlinks[dkey] = '<ref>' + str(v[1]) + '</ref>'
 
     urtext = urpage.text
     for r in tuple(dlinks.items()):
@@ -53,4 +77,5 @@ else:
     print('Printing appended Urdu Page')
     print(urpage.text)
 
-    urpage.save(u"انگریزی حوالے کاپی کیے")
+    # save the page
+    urpage.save(summary=self.summary, minor=False)
