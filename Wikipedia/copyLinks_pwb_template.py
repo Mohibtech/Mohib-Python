@@ -100,9 +100,12 @@ class CopyLinksBot(
         i=1
         for tag in alltags:
             if tag.tag=='ref':
-                name = tag.attributes[0]
-                refval = name.value
-                
+                if tag.attributes == []:      # check if attributes list is empty
+                    refval='NoRefName'        # Reference has no name so assigning "NoRefName"
+                else:
+                    name = tag.attributes[0]
+                    refval = name.value
+                   
                 if tag.contents is None:
                     #conval = search(reftags,refval)
                     #reftags[i] = (refval,reftags[conval][1])
@@ -116,8 +119,6 @@ class CopyLinksBot(
             dkey = 'و' + str(k) + 'و'
             dlinks[dkey] = '<ref>' + str(v[1]) + '</ref>'
 
-
-        print('After link dict')
         urtext = urpage.text
         for r in tuple(dlinks.items()):
             urtext = urtext.replace(*r)
@@ -131,11 +132,9 @@ class CopyLinksBot(
         else:
             urpage.text = urtext + newln*2
 
-        print('Printing appended Urdu Page')
         print(urpage.text)
     
-        # save the page
-        
+        # save the page      
         urpage.save(summary=self.summary, minor=False)
         #self.put_current(urpage.text, summary=self.summary)
 
