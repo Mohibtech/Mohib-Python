@@ -87,9 +87,7 @@ class CopyLinksBot(
         # Extracting External Links using mwparserfromhell function
         # extlinks = wikicode.filter_external_links()
 
-        print('just before filter tags')
-        alltags = wikicode.filter_tags()
-        
+        alltags = wikicode.filter_tags()     
         reftags = {}
     
         def search(myDict, search1):
@@ -125,12 +123,20 @@ class CopyLinksBot(
 
         newln = '\n'
 
-        hawalajat = '{{حوالہ جات}}'
-        urduref = '== حوالہ جات ==' + newln + hawalajat + newln
-        if hawalajat not in urtext:
-            urpage.text = urtext + newln*2 + urduref + newln
+        # Using NoReferences for adding Reference section in the page after commenting out this section 
+        #         hawalajat = '{{حوالہ جات}}'
+        #         urduref = '== حوالہ جات ==' + newln + hawalajat + newln
+        #         if hawalajat not in urtext:
+        #             urpage.text = urtext + newln*2 + urduref + newln
+        #         else:
+        #             urpage.text = urtext + newln*2
+        
+        # Using noreferences to add Reference template if not present
+        self.norefbot = noreferences.NoReferencesBot(None)
+        if self.norefbot.lacksReferences(urtext):
+            urtext = self.norefbot.addReferences(urtext)
         else:
-            urpage.text = urtext + newln*2
+            urpage.text = urtext + '\n'
 
         print(urpage.text)
     
