@@ -85,8 +85,13 @@ class CopyLinksBot(
         wikitext = enpage.get()               
         wikicode = mwp.parse(wikitext)
 
-        # Extracting External Links using mwparserfromhell function
-        # extlinks = wikicode.filter_external_links()
+        # Extracting sfn templates and converting them in REF tags
+        sfnlist = []
+        for template in wikicode.filter_templates():
+            if template.name in ('sfn', 'sfn'):
+                sfnlist.append(template)
+                templ_rep = '<ref>' + str(template) + '</ref>'
+                wikicode.replace(template , templ_rep)
 
         alltags = wikicode.filter_tags()     
         reftags = {}
@@ -122,16 +127,7 @@ class CopyLinksBot(
         for r in tuple(dlinks.items()):
             urtext = urtext.replace(*r)
 
-        newln = '\n'
-
-        # Using NoReferences for adding Reference section in the page after commenting out this section 
-        #         hawalajat = '{{حوالہ جات}}'
-        #         urduref = '== حوالہ جات ==' + newln + hawalajat + newln
-        #         if hawalajat not in urtext:
-        #             urpage.text = urtext + newln*2 + urduref + newln
-        #         else:
-        #             urpage.text = urtext + newln*2
-        
+        # newln = '\n'
         # Using noreferences to add Reference template if not present
         self.norefbot = noreferences.NoReferencesBot(None)
         if self.norefbot.lacksReferences(urtext):
