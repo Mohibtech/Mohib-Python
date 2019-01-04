@@ -1,13 +1,16 @@
-# Copy Reference from English Article to Urdu Page
-import mwparserfromhell as mwp
+# Copy Reference from English Article to Urdu Pageimport mwparserfromhell as mwp
 import pywikibot
+from scripts import noreferences
 
 def search(myDict, search1):
     for key, value in myDict.items():
         if search1 in value:  
             return key
 
-title = "داس کیپیٹل"
+
+title = "متحدہ حزب اختلاف (بھارت)" 
+#"پھیرن"
+#title = "داس کیپیٹل"
 
 site = pywikibot.Site('ur', 'wikipedia')
 urpage = pywikibot.Page(site, title)
@@ -30,49 +33,83 @@ else:
     wikitext = enpage.get()               
     wikicode = mwp.parse(wikitext)
 
-    # Extracting External Links using mwparserfromhell function
-    #extlinks = wikicode.filter_external_links()
+    # Extracting sfn templates and converting them in REF tags
+    sfnlist = []
+    for template in wikicode.filter_templates():
+        if template.name in ('sfn', 'sfn'):
+            sfnlist.append(template)
+            templ_rep = '<ref>' + str(template) + '</ref>'
+            wikicode.replace(template , templ_rep)
+
 
     alltags = wikicode.filter_tags()
     reftags = {}
+    refdict = {}
     #[tag.contents for tag in alltags if tag.tag=='ref']
       
     i=1
     for tag in alltags:
         if tag.tag=='ref':
             if tag.attributes == []:      #check if attributes list is empty
-                refval='NoRefName'
+                refname='NoRefName'
             else:
-                name = tag.attributes[0]
-                refval = name.value
-                            
+                name = tag.attributes[0]  # tag.attributes[0] is reference name
+                refname = str(name.value)
+                
             if tag.contents is None:
-                #conval = search(reftags,refval)
-                #reftags[i] = (refval,reftags[conval][1])
-                pass
-            else:    
-                reftags[i] = (refval,tag.contents)
-                i += 1
+                refval = refdict.get(refname,'noval')
+                if refval == 'noval':
+                    refdict[refname] = i
+                    reftags[i] = (refname,refval)
+                    i += 1 
+                else:
+                    if refdict[refname]:
+                        pass
+                        #i += 1 #increment the key to indicate that a valid reference added in dict
+
+                #refkey = search(reftags,refname)
+                #reftags[i] = (refval,reftags[refkey][1])
+            else:
+                if refname in refdict:
+                    ival = refdict[refname]
+                    reftags[ival] = (refname,tag.contents)
+                else:
+                    reftags[i] = (refname,tag.contents)
+                    if refname != 'NoRefName':
+                        refdict[refname] = i
+                    i += 1
+                #print(reftags[i])
+                
 
     dlinks = {}
     for k,v in reftags.items():
         dkey = 'و' + str(k) + 'و'
-        dlinks[dkey] = '<ref>' + str(v[1]) + '</ref>'
+        reftext = str(v[1])
+        dlinks[dkey] = '<ref>' + reftext + '</ref>'
 
     urtext = urpage.text
     for r in tuple(dlinks.items()):
         urtext = urtext.replace(*r)
 
-    newln = '\n'
-
-    hawalajat = '{{حوالہ جات}}'
-    urduref = '== حوالہ جات ==' + newln + hawalajat + newln
-    if hawalajat not in urtext:
-        urpage.text = urtext + newln*2 + urduref + newln
+    
+    # newln = '\n'
+    # hawalajat = '{{حوالہ جات}}'
+    # urduref = '== حوالہ جات ==' + newln + hawalajat + newln
+    # if hawalajat not in urtext:
+    #     urpage.text = urtext + newln*2 + urduref + newln
+    # else:
+    #     urpage.text = urtext + newln*2
+    
+    # Used noreferences to add Reference List in Article
+    norefbot = noreferences.NoReferencesBot(None)
+    if norefbot.lacksReferences(urtext):
+        urtext = norefbot.addReferences(urtext)
     else:
-        urpage.text = urtext + newln*2
-
+        urpage.text = urtext + '\n'
+    
+    print('Printing appended Urdu Page')
     print(urpage.text)
 
     # save the page
-    urpage.save(summary=self.summary, minor=False)
+    #urpage.save(summary=self.summary, minor=False)
+
