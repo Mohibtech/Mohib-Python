@@ -7,10 +7,7 @@ def search(myDict, search1):
         if search1 in value:  
             return key
 
-
 title = "متحدہ حزب اختلاف (بھارت)" 
-#"پھیرن"
-#title = "داس کیپیٹل"
 
 site = pywikibot.Site('ur', 'wikipedia')
 urpage = pywikibot.Page(site, title)
