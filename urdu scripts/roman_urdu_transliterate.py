@@ -1,23 +1,24 @@
 import codecs
 import os
 import re
+
 def dict_populate(FILE_NAME):
 	try:
 		if os.path.isfile(FILE_NAME):
-		store = open(FILE_NAME,'r',encoding='utf-8')
+			store = open(FILE_NAME,'r',encoding='utf-8')
 		for line in store.readlines():
 			eng,urdu = line.strip().split(':',1)
 			roman_urdu[eng] = urdu
 	except ValueError as e:
-	print(e)
+		print(e)
 
 def multiwordReplace(text, wordDic):
 	"""
 	take a text and replace words that match a key in a dictionary with
 	the associated value, return the changed text
 	"""
-	#r'\b'+r'\b|\b'.
-    	rc = re.compile(r'\b|\b'.join(map(re.escape, wordDic)))
+	# r'\b'+r'\b|\b'
+	rc = re.compile(r'\b|\b'.join(map(re.escape, wordDic)))
 
 	def translate(match):
 		return wordDic[match.group(0)]
