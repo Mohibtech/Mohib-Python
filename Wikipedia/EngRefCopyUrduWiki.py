@@ -18,6 +18,9 @@ interDict = {}
 for i in langlst:
     lang = str(i.site).split(':')[1]
     interDict[lang] = i.title
+    if lang == 'en':
+        break
+
 
 if len(interDict)==0:
     print('Link Dictionary is empty')
@@ -100,7 +103,7 @@ else:
     # Used noreferences to add Reference List in Article
     norefbot = noreferences.NoReferencesBot(None)
     if norefbot.lacksReferences(urtext):
-        urtext = norefbot.addReferences(urtext)
+        urpage.text = norefbot.addReferences(urtext)
     else:
         urpage.text = urtext + '\n'
     

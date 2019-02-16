@@ -29,7 +29,7 @@ def remove_stopwords(words):
     return " ".join(stopwords_removed)
 
 # Read whole unicode text 
-text = open(r'C:\TECHNICAL\Programming\Python\Firdoos.txt','r',encoding='utf8').read()
+text = open(r'C:\TECHNICAL\MISC\Python\Firdoos.txt','r',encoding='utf8').read()
 
 
 # Calling function to remove punctuations using unicode codepoints starting with 'P'

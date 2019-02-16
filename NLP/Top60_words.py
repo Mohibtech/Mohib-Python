@@ -3,22 +3,27 @@ import nltk
 import matplotlib.pyplot as plt
 import pandas as pd
 from nltk.probability import FreqDist
-nltk.download("stopwords")
+#nltk.download("stopwords")
 from nltk.corpus import stopwords
 
-baseDir = r'H:\Backup\Python\notebooks\Text and Speech'
-# iwr -URI https://raw.githubusercontent.com/MicrosoftLearning/AI-Introduction/master/file s/Moon.txt -Outfile Moon.txt
+baseDir = r'C:\TECHNICAL\MISC\Python'
+# iwr -URI https://raw.githubusercontent.com/MicrosoftLearning/AI-Introduction/master/files/Moon.txt -Outfile Moon.txt
 doc1 = open(os.path.join(baseDir,'Moon.txt'), 'r')
 doc1Txt = doc1.read()
+
 
 # Filter out the stop words, punctuations and digits
 from string import punctuation
 txt = ''.join(c for c in doc1Txt if not c.isdigit())
 txt = ''.join(c for c in txt if c not in punctuation).lower()
+
+# Download stopwords once if not downloaded  before
+nltk.download('stopwords')
+
 txt = ' '.join([word for word in txt.split() if word not in (stopwords.words('english'))])
 
 # Get the frequency distribution of the remaining words
-words = nltk.tokenize.word_tokenize(txt)
+words = nltk.tokenize.wordpunct_tokenize(txt)
 fdist = FreqDist(words)
 count_frame = pd.DataFrame(fdist, index =[0]).T
 count_frame.columns = ['Count']
