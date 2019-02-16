@@ -29,14 +29,17 @@ def remove_stopwords(words):
     return " ".join(stopwords_removed)
 
 # Read whole unicode text 
-text = open('Firdoos.txt','r',encoding='utf8').read()
+text = open(r'C:\TECHNICAL\Programming\Python\Firdoos.txt','r',encoding='utf8').read()
+
 
 # Calling function to remove punctuations using unicode codepoints starting with 'P'
-text = remove_punct(text)
+#text = remove_punct(text)
 
 # Tokenizing text into words
-words = nltk.word_tokenize(text)
+#words = nltk.word_tokenize(text) Method does not work now
+words = nltk.tokenize.wordpunct_tokenize(text)
 
+# Remove stop words from text
 text = remove_stopwords(words)
 
 # Reconstruct Arabic/Urdu sentences to be used in applications that don't support Arabic script.
@@ -44,11 +47,13 @@ from arabic_reshaper import arabic_reshaper
 text = arabic_reshaper.reshape(text)
 
 # For right-to-left text rendering, need to use get_display from python-bidi
+# Install using pip install python-bidi
 from bidi.algorithm import get_display
 text = get_display(arabic_reshaper.reshape(text))
 
 # Generate a word cloud image
-wordcloud =  WordCloud(font_path='urdu-najd-regular-1.ttf').generate(text)
+fontpath = r"C:\Users\Humera\AppData\Local\Microsoft\Windows\Fonts\urdu-najd-regular-1.ttf"
+wordcloud =  WordCloud(font_path=fontpath).generate(text)
 
 # Display the generated image: the matplotlib way
 import matplotlib.pyplot as plt

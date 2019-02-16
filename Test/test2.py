@@ -1,37 +1,42 @@
-#textfile1 = r'D:\script\MohibPython\Mohib-Python\Test\poem.txt'
-textfile = r'D:\script\test\poem.txt'
+import os
+from tkinter import Tk, Label, Entry, StringVar
+from tkinter import filedialog
 
-fpoem = open(textfile)
-fpoem.close()
+app = Tk()
 
-with open(textfile) as fpoem:
-    result = fpoem.read()
-    print(result)
+def findfile(start, name):
+    for relpath, dirs, files in os.walk(start):
+        if name in files:
+            full_path = os.path.join(start, relpath, name)
+            print(os.path.normpath(os.path.abspath(full_path)))
+ 
 
-results = []
+labelText=StringVar()
+labelText.set("Directory Selected")
+labelDir=Label(app, textvariable=labelText, height=4)
+#labelDir.pack(side="left")
+labelDir.grid(row=1,column=1)
 
-with open(textfile) as fpoem:
-    results = fpoem.readlines()
+folder_selected = filedialog.askdirectory()
 
+labelText=StringVar()
+labelText.set(folder_selected)
+labelDir=Label(app, textvariable=labelText, height=4)
+#labelDir.pack(side="left")
+labelDir.grid(row=1,column=2)
 
+# Label for File input
+labelText=StringVar()
+labelText.set("Enter File Name")
+labelDir=Label(app, textvariable=labelText, height=4)
+labelDir.grid(row=2,column=1)
 
-#write method for writing single line to a file
-quotes = r'D:\script\test\quotes.txt'
-with open(quotes,'w') as fq:
-    fq.write('Before God we are all equally wise - and equally foolish.')
-    fq.write('I never teach my pupils. I only attempt to provide the conditions in which they can learn.')
+directory=StringVar(None)
+dirname=Entry(app,textvariable=folder_selected,width=50)
+#dirname.pack(side="left")
+dirname.grid(row=2,column=2)
+result = dirname.get()
 
+print(result)
 
-Einstein = ['I never think of the future - it comes soon enough.',
-'It is a miracle that curiosity survives formal education.',
-'It is the supreme art of the teacher to awaken joy in creative expression and knowledge.']
-
-with open(quotes,'w') as fq:
-    fq.writelines(line+'\n' for line in Einstein)
-    fq.writelines()
-
-
-
-
-
-
+app.mainloop()

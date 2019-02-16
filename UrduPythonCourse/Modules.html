@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>Modules</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        <link href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css" rel="stylesheet" type="text/css">
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'HelveticaNeue-Light', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        <script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script>
+    </head>
+    <body>
+        <h2 id="modules">Modules</h2>
+<p>A module is a file containing Python definitions and statements. The file name is the module name with the suffix <code>.py</code> appended.</p>
+<ul>
+<li>Consider a module to be the same as a code library.</li>
+<li>A file containing a set of functions you want to include in your application.</li>
+</ul>
+<h3 id="platform-module">platform Module</h3>
+<p>Few methods in module platform.</p>
+<pre><code class="language-python"><div><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> platform
+<span class="hljs-meta">&gt;&gt;&gt; </span>print(<span class="hljs-string">'system  :'</span>, platform.system())
+<span class="hljs-meta">&gt;&gt;&gt; </span>print(<span class="hljs-string">'Computer :'</span>, platform.node())
+<span class="hljs-meta">&gt;&gt;&gt; </span>print(<span class="hljs-string">'release  :'</span>, platform.release())
+<span class="hljs-meta">&gt;&gt;&gt; </span>print(<span class="hljs-string">'version  :'</span>, platform.version())
+<span class="hljs-meta">&gt;&gt;&gt; </span>print(<span class="hljs-string">'machine  :'</span>, platform.machine())
+<span class="hljs-meta">&gt;&gt;&gt; </span>print(<span class="hljs-string">'processor:'</span>, platform.processor())
+-----------------------------------------------
+System  : Windows
+Computer : MohibYoga
+Release  : <span class="hljs-number">10</span>
+Version  : <span class="hljs-number">10.0</span><span class="hljs-number">.17134</span>
+Machine  : AMD64
+Processor: Intel64 Family <span class="hljs-number">6</span> Model <span class="hljs-number">142</span> Stepping <span class="hljs-number">10</span>, GenuineIntel
+</div></code></pre>
+<h3 id="sys-module">sys Module</h3>
+<p>sys module provides number of functions and variables that can be used to manipulate different parts of the Python runtime environment.<br>
+It also allows to use stdin, stdout, stderr for standard input, output and error handling. sys.argv list contains arguments passed to python scripts.</p>
+<pre><code class="language-python"><div><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> sys
+<span class="hljs-meta">&gt;&gt;&gt; </span>sys.version
+<span class="hljs-string">'3.7.2 (tags/v3.7.2:9a3ffc0492, Dec 23 2018, 23:09:28) [MSC v.1916 64 bit (AMD64)]'</span>
+
+<span class="hljs-meta">&gt;&gt;&gt; </span>sys.platform
+<span class="hljs-string">'win32'</span>
+
+<span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> sys.path:
+        print(i)
+
+C:\Users\Mohib\AppData\Local\Programs\Python\Python37\Lib\idlelib
+C:\Users\Mohib\AppData\Local\Programs\Python\Python37\python37.zip
+C:\Users\Mohib\AppData\Local\Programs\Python\Python37\DLLs
+C:\Users\Mohib\AppData\Local\Programs\Python\Python37\lib
+C:\Users\Mohib\AppData\Local\Programs\Python\Python37
+C:\Users\Mohib\AppData\Roaming\Python\Python37\site-packages
+C:\Users\Mohib\AppData\Local\Programs\Python\Python37\lib\site-packages
+</div></code></pre>
+<h3 id="os-module">os Module</h3>
+<pre><code class="language-python"><div><span class="hljs-meta">&gt;&gt;&gt; </span><span class="hljs-keyword">import</span> os
+<span class="hljs-meta">&gt;&gt;&gt; </span>os.getcwd()
+<span class="hljs-string">'C:\\php'</span>
+</div></code></pre>
+<p>Create new directory</p>
+<pre><code class="language-python"><div>os.mkdir(<span class="hljs-string">'newDir'</span>)
+</div></code></pre>
+<p>Rename an existing directory</p>
+<pre><code class="language-python"><div>os.rename(<span class="hljs-string">'newDir'</span>,<span class="hljs-string">'changedDir'</span>)
+</div></code></pre>
+<p>Remove directory</p>
+<pre><code class="language-python"><div>os.rmdir(<span class="hljs-string">'changedDir'</span>)
+</div></code></pre>
+<p>Traversing a directory and printing all filenames including sub directories.</p>
+<pre><code class="language-python"><div><span class="hljs-keyword">import</span> os
+<span class="hljs-keyword">for</span> (dirname, subshere, fileshere) <span class="hljs-keyword">in</span> os.walk(<span class="hljs-string">r'C:\TECHNICAL\MS'</span>):
+    print(<span class="hljs-string">'-----------------------------------------------------'</span>)
+    print(<span class="hljs-string">'['</span> + dirname + <span class="hljs-string">']'</span>)
+    print(<span class="hljs-string">'-----------------------------------------------------'</span>)
+    <span class="hljs-keyword">for</span> fname <span class="hljs-keyword">in</span> fileshere:
+        print(os.path.join(dirname, fname))
+</div></code></pre>
+
+    </body>
+    </html>

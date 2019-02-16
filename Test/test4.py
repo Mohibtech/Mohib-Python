@@ -1,25 +1,9 @@
-import sys
-import requests
-import pyperclip
-import bs4
-import webbrowser
+import re
+#template : 422XX-47XXXX4-1
+instr =  '42211-4756564-11'
 
-def start():
-	search = False
-	if search:
-		keyword = input('Enter search term: ')
-	else:
-		# if no keyword is entered, the script would 
-		# search for the keyword copied in the clipboard
-		keyword = pyperclip.paste()
+if re.match(r'\d{3}\w{2}-\d{2}\w{4}\d-\d{1}', instr):
+	print('Template matched')
+else:
+	print('Template match failed')
 
-	res = requests.get('https://google.com/search?q='+keyword)
-	soup = bs4.BeautifulSoup(res.text,'lxml')
-	links = soup.select('.r a')
-	tab_counts = min(5, len(links))
-
-	for i in range(tab_counts):
-		webbrowser.open('https://google.com' + links[i].get('href'))
-
-
-start()
