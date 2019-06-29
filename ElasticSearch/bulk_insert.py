@@ -1,6 +1,7 @@
-# Elastic Search 
+# Mastering Elastic Search 6.X and Elastic Stack by Chris Fauerbach
+# Document Indexes with bulk api
 
-import request
+import requests
 import csv
 import json
 
