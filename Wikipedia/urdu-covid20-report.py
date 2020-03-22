@@ -5,6 +5,7 @@ import pandas as pd
 import mwapi
 from mwapi.errors import APIError
 
+
 rt_header = """== COVID-19 article status on {year}-{month}-{day} ==
    تاریخ تجدید: ~~~
     {{| class="wikitable sortable"
@@ -21,7 +22,6 @@ rt_row = """|-
     |{view rank}
     |[[{title}|{title}]]
     |{views}
-    |{prediction}
 """
 
 
@@ -78,12 +78,11 @@ def get_yesterdates():
     return date_parts
 
 
-def format_row(rank, title, views, prediction, row_template):
+def format_row(rank, title, views, row_template):
 
     table_row = {'view rank': rank,
                  'title': title.replace("_", " "),
                  'views': views,
-                 'prediction': prediction,
                  }
 
     row = row_template.format(**table_row)
@@ -185,8 +184,8 @@ rank = range(1, len(df_pandemic) + 1)
 df_pandemic['rank'] = list(rank)
 
 
-report_rows = [format_row(x, y, z, a, rt_row)
-               for x, y, z, a in zip(df_pandemic['rank'],
+report_rows = [format_row(x, y, z,  rt_row)
+               for x, y, z in zip(df_pandemic['rank'],
                                      df_pandemic['page title'],
                                      df_pandemic['views'],
                                      )]
