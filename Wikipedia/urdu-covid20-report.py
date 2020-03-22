@@ -27,32 +27,6 @@ rt_row = """|-
 """
 
 
-def get_token(auth1):
-    """
-    Accepts an auth object for a user
-    Returns an edit token for the specified wiki
-    """
-
-    result = requests.get(
-        url="https://en.wikipedia.org/w/api.php",  # TODO add to config
-        params={
-            'action': "query",
-            'meta': "tokens",
-            'type': "csrf",
-            'format': "json"
-        },
-        # TODO add to config
-        headers={'User-Agent': "jonnymorgan.esq@gmail.com"},
-        auth=auth1,
-    ).json()
-
-    #     print(result)
-    edit_token = result['query']['tokens']['csrftoken']
-    #     print(edit_token)
-
-    return(edit_token)
-
-
 def get_template_mems(template):
     # If passed a `continuation` parameter, returns an iterable over a continued query.
     # On each iteration, a new request is made for the next portion of the results.
@@ -140,29 +114,6 @@ def get_latest_rev(page_title):
         latest_rev = None
 
     return latest_rev
-
-
-# def get_quality_score(revision):
-    # https://ores.wikimedia.org/v3/scores/enwiki/866126465/wp10?features=true
-    ENDPOINT = 'https://ores.wikimedia.org/v3/scores/enwiki/'
-
-    params = {'models': 'wp10',
-              'revids': revision,
-              }
-
-    page_data = api_call(ENDPOINT, params)
-    #     pprint(page_data)
-
-    try:
-        prediction = page_data['enwiki']['scores'][str(
-            revision)]['wp10']['score']['prediction']
-    #     print(prediction)
-
-    except:
-        print("unable to retrieve ORES score for " + str(revision))
-        prediction = None
-
-    return prediction
 
 
 def get_pageviews(article_params):
