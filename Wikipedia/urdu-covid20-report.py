@@ -5,14 +5,12 @@ import pandas as pd
 import mwapi
 from mwapi.errors import APIError
 
-
 rt_header = """== COVID-19 article status on {year}-{month}-{day} ==
-    Last updated on ~~~~~
+   تاریخ تجدید: ~~~
     {{| class="wikitable sortable"
-    !Pageview rank
-    !Article
-    !Page views
-    !Predicted quality class
+    !شمار
+    !مضمون
+    !مشاہدات
 """
 
 footer = """|}
