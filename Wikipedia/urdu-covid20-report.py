@@ -4,10 +4,11 @@ import json
 import pandas as pd
 import mwapi
 from mwapi.errors import APIError
+import pywikibot
 
 
-rt_header = """== COVID-19 article status on {year}-{month}-{day} ==
-   تاریخ تجدید: ~~~
+rt_header = """==   کورونا وائرس 2019 مضامین پیشرفت {year}-{month}-{day} ==
+   تاریخ تجدید: ~~~~~
     {{| class="wikitable sortable"
     !شمار
     !مضمون
@@ -128,6 +129,24 @@ def get_pageviews(article_params):
     return views
 
 
+def publish_report(output):
+    """
+    Accepts page text,  edit summary and Publishes the formatted page text to the specified wiki page
+    """
+
+    title_page = 'ویکیپیڈیا:ویکی منصوبہ برائے کووڈ-19/مضامین کی شماریات'
+
+    site = pywikibot.Site('ur', 'wikipedia')
+    urpage = pywikibot.Page(site, title_page)
+
+    urtext = urpage.text
+
+    urpage.text = urtext + '\n' + output
+
+    # save the page
+    urpage.save(summary='خودکار: کورونا وائرس صفحات شماریات', minor=False)
+
+
 session = mwapi.Session('https://ur.wikipedia.org/',
                         user_agent="fztechno@gmail.com")  # add ua to config
 
@@ -164,6 +183,7 @@ for row in df_pandemic['page title']:
     q_params['title'] = row
     v = get_pageviews(q_params)
     views.append(v)
+    print(v)
 
 # Add the scores and revs into the dataframe
 lrs = pd.Series(latest_revs)
@@ -184,14 +204,17 @@ rank = range(1, len(df_pandemic) + 1)
 df_pandemic['rank'] = list(rank)
 
 
-report_rows = [format_row(x, y, z,  rt_row)
+report_rows = [format_row(x, y, z, rt_row)
                for x, y, z in zip(df_pandemic['rank'],
-                                     df_pandemic['page title'],
-                                     df_pandemic['views'],
-                                     )]
+                                  df_pandemic['page title'],
+                                  df_pandemic['views'],
+                                  )]
 
 rows_wiki = ''.join(report_rows)
 
 header = rt_header.format(**date_parts)
 
 output = header + rows_wiki + footer
+
+
+publish_report(output)
