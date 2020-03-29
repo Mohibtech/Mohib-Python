@@ -203,6 +203,9 @@ rank = range(1, len(df_pandemic) + 1)
 
 df_pandemic['rank'] = list(rank)
 
+# Filling nan values with 0 for views column in DF
+df_pandemic['views'] = df_pandemic['views'].fillna(0)
+print(df_pandemic['views'])
 
 report_rows = [format_row(x, y, z, rt_row)
                for x, y, z in zip(df_pandemic['rank'],
