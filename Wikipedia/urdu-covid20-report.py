@@ -2,10 +2,9 @@ from datetime import datetime, timedelta
 import requests
 import json
 import pandas as pd
+import pywikibot
 import mwapi
 from mwapi.errors import APIError
-import pywikibot
-
 
 rt_header = """==   کورونا وائرس 2019 مضامین پیشرفت {year}-{month}-{day} ==
    تاریخ تجدید: ~~~~~
@@ -129,30 +128,13 @@ def get_pageviews(article_params):
     return views
 
 
-def publish_report(output):
-    """
-    Accepts page text,  edit summary and Publishes the formatted page text to the specified wiki page
-    """
-
-    title_page = 'ویکیپیڈیا:ویکی منصوبہ برائے کووڈ-19/مضامین کی شماریات'
-
-    site = pywikibot.Site('ur', 'wikipedia')
-    urpage = pywikibot.Page(site, title_page)
-
-    urtext = urpage.text
-
-    urpage.text = urtext + '\n' + output
-
-    # save the page
-    urpage.save(summary='خودکار: کورونا وائرس صفحات شماریات', minor=False)
-
-
 session = mwapi.Session('https://ur.wikipedia.org/',
                         user_agent="fztechno@gmail.com")  # add ua to config
 
 # get yesterday's date info for queries and reporting
 date_parts = get_yesterdates()
 
+# get all corona articles using template
 cat = 'سانچہ: کورونا وائرس کی وبا، 2019ء - 2020ء'
 mems = get_template_mems(cat)
 # print(mems)
@@ -174,6 +156,7 @@ q_params = {'startdate': date_parts['year'] + date_parts['month'] + date_parts['
             'title': '',
             }  # do this outside the loop?
 
+# page views list
 for row in df_pandemic['page title']:
     latest = get_latest_rev(row)
     latest_revs.append(latest)
@@ -183,7 +166,7 @@ for row in df_pandemic['page title']:
     q_params['title'] = row
     v = get_pageviews(q_params)
     views.append(v)
-    print(v)
+    print(row, v)
 
 # Add the scores and revs into the dataframe
 lrs = pd.Series(latest_revs)
@@ -192,21 +175,27 @@ lrs = pd.Series(latest_revs)
 df_pandemic.insert(loc=1, column='latest revision', value=lrs)
 #df_pandemic.insert(loc=2, column='quality prediction', value=ss)
 
-
+# create views pandas series
 vs = pd.Series(views)
 
+# insert column views
 df_pandemic.insert(loc=2, column='views', value=vs)
 
+# sort views values in DF
 df_pandemic.sort_values('views', ascending=False, inplace=True)
 
 rank = range(1, len(df_pandemic) + 1)
 
 df_pandemic['rank'] = list(rank)
 
-# Filling nan values with 0 for views column in DF
-df_pandemic['views'] = df_pandemic['views'].fillna(0)
 print(df_pandemic['views'])
 
+df_pandemic['views'].fillna(0, inplace = True)
+
+# After fillna on views column 
+print(df_pandemic['views'])
+
+#report_rows
 report_rows = [format_row(x, y, z, rt_row)
                for x, y, z in zip(df_pandemic['rank'],
                                   df_pandemic['page title'],
@@ -218,6 +207,23 @@ rows_wiki = ''.join(report_rows)
 header = rt_header.format(**date_parts)
 
 output = header + rows_wiki + footer
+
+def publish_report(output):
+    """
+    Accepts page text,  edit summary and Publishes the formatted page text to the specified wiki page
+    """
+
+    title_page = 'ویکیپیڈیا:ویکی منصوبہ برائے کووڈ-19/مضامین کی شماریات'
+
+    site = pywikibot.Site('ur', 'wikipedia')
+    urpage = pywikibot.Page(site, title_page)
+
+    urtext = urpage.text
+
+    urpage.text = urtext + '\n' + output
+
+    # save the page
+    urpage.save(summary='خودکار: کورونا وائرس صفحات شماریات', minor=False)
 
 
 publish_report(output)
