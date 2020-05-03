@@ -54,7 +54,7 @@ def covid_cases_country():
 
         cnt_country += 1
         # Getting data of first 36 countries (38 -2 )
-        if cnt_country >= 38:
+        if cnt_country >= 88:
             break
 
     return d_covid19
@@ -79,14 +79,14 @@ def output_results():
 
     with open(csvfile, mode='w', newline='') as csvwrite:
         t_head = ['Region', 'TotalCases', 'NewCases', 'TotalDeaths',
-                  'NewDeaths', 'TotalRecovered', 'ActiveCases', 'TotalTests', 'NewTests']
+                  'NewDeaths', 'TotalRecovered', 'ActiveCases', 'TotalTests']
         line_written = 0
 
         writer = csv.writer(csvwrite, delimiter=';')
 
         writer.writerow(t_head)
         for d in covid_cases:
-            row_fields = [covid_cases[d]['Country'], covid_cases[d]['TotalCases'], covid_cases.get(d, {}).get('NewCases', 'NA'), covid_cases[d]['TotalDeaths'], covid_cases.get(d, {}).get('NewDeaths', 'NA'), covid_cases[d]['TotalRecovered'], covid_cases[d]['ActiveCases'], covid_cases.get(d, {}).get('TotalTests', 'NA'), covid_cases.get(d, {}).get('NewTests', 'NA')
+            row_fields = [covid_cases[d]['Country'], covid_cases[d]['TotalCases'], covid_cases.get(d, {}).get('NewCases', 'NA'), covid_cases[d]['TotalDeaths'], covid_cases.get(d, {}).get('NewDeaths', 'NA'), covid_cases[d]['TotalRecovered'], covid_cases[d]['ActiveCases'], covid_cases.get(d, {}).get('TotalTests', 'NA')
                           ]
 
             writer.writerow(row_fields)
@@ -117,7 +117,7 @@ def msg_start_date():
     elif month == '5':
         covid_mon = 'مئی'
 
-    final_date = f'- {now.year} {covid_mon} {now.day} *'
+    final_date = f'* {now.day} {covid_mon} {now.year} : '
 
     return final_date
 
@@ -132,11 +132,11 @@ def usa_stats():
     TotRecovered = usa_covid['TotalRecovered']
     ActCases = usa_covid['ActiveCases']
     NewCases = usa_covid['NewCases']
-    NewTests = usa_covid['NewTests']
+    #NewTests = usa_covid['NewTests']
     TotTests = usa_covid['TotalTests']
 
     msg_date = msg_start_date()
-    day_update = f' {NewCases} نئے کیس ، {TotCases} کل کیس ، {NewDeaths} یومیہ اموات ، {TotDeaths} کل اموات ، {ActCases} زیر علاج ،  {TotRecovered} کل صحتیاب ،  {NewTests} نئے ٹیسٹ ، {TotTests} کل ٹیسٹ'
+    day_update = f' {NewCases} نئے کیس ، {TotCases} کل کیس ، {NewDeaths} یومیہ اموات ، {TotDeaths} کل اموات ، {ActCases} زیر علاج ،  {TotRecovered} کل صحتیاب ، {TotTests} کل ٹیسٹ'
     day_update = msg_date + day_update
 
     title = 'امریکا میں کورونا وائرس کی وبا، 2020ء'
@@ -169,7 +169,54 @@ def usa_stats():
 
     return day_update
 
+def Pak_stats():
+    now = datetime.datetime.now()
+
+    usa_covid = covid_cases['Pakistan']
+    TotCases = usa_covid['TotalCases']
+    TotDeaths = usa_covid['TotalDeaths']
+    NewDeaths = usa_covid['NewDeaths']
+    TotRecovered = usa_covid['TotalRecovered']
+    ActCases = usa_covid['ActiveCases']
+    NewCases = usa_covid['NewCases']
+    #NewTests = usa_covid['NewTests']
+    TotTests = usa_covid['TotalTests']
+
+    msg_date = msg_start_date()
+    day_update = f' {NewCases} نئے کیس ، {TotCases} کل کیس ، {NewDeaths} یومیہ اموات ، {TotDeaths} کل اموات ، {ActCases} زیر علاج ،  {TotRecovered} کل صحتیاب ، {TotTests} کل ٹیسٹ'
+    day_update = msg_date + day_update
+
+    title = 'پاکستان_میں_کورونا_وائرس_کی_وبا،_2020ء'
+    site = pywikibot.Site('ur', 'wikipedia')
+    urpage = pywikibot.Page(site, title)
+
+    wikitext = urpage.get()
+    wikicode = mwp.parse(wikitext)
+
+    for section in wikicode.get_sections(levels=[3]):
+        clean = section.strip_code()
+
+    for section in wikicode.get_sections(levels=[4]):
+        sec_4 = section
+        #upd_section = sec_4 + '\n' + day_update
+        print(sec_4)
+
+    regex = r"((. |\n)*)(==.*حوالہ جات.*==)"
+
+    subst = f"\\1{day_update}\\n\\n\\3"
+    result = re.sub(regex, subst, wikitext, 0)
+
+    write_output(result, 'Pak_corona_epidemic.txt')
+
+    urpage.text = result
+    # save the page
+    urpage.save(summary='خودکار: اندراج ', minor=False)
+
+    print(wikicode)
+
+    return day_update
 
 ur_day = usa_stats()
+pk_corona_stats = Pak_stats()
 
 print(ur_day)
